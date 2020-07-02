@@ -188,7 +188,7 @@ KUBECONFIG="./kubeconfig-us-east-1.yml" kubectl exec statefulset/consul-server -
 
 Apply the api-v2 application to US West
 
-````bash
+```bash
 KUBECONFIG="./kubeconfig-us-west-1.yml" kubectl apply -f kubernetes/api-v2-us-west-1.yaml 
 ```
 
