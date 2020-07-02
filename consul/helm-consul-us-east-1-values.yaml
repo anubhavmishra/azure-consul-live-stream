@@ -1,0 +1,19 @@
+global:
+  name: consul
+  image: consul:1.8.0
+  imageK8S: hashicorp/consul-k8s:0.16.0
+  datacenter: us-east-1
+  federation:
+    enabled: true
+    createFederationSecret: true
+  tls:
+    enabled: true
+meshGateway:
+ enabled: true
+connectInject:
+ enabled: true
+ui:
+ enabled: true
+ service:
+    enabled: true
+    type: "LoadBalancer"

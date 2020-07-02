@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-v1
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: api-v1
+  template:
+    metadata:
+      labels:
+        app: api-v1
+      annotations:
+        "consul.hashicorp.com/connect-inject": "true"
+        "consul.hashicorp.com/service-meta-version": "1"
+        "consul.hashicorp.com/service-tags": "v1"
+    spec:
+      containers:
+      - name: api
+        image: hashicorp/http-echo:latest
+        args:
+          - -text="hello from v1"
+          - -listen=:8080
+        ports:
+          - containerPort: 8080
+            name: http

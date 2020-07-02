@@ -1,0 +1,27 @@
+global:
+  datacenter: us-west-1
+  image: consul:1.8.0
+  imageK8S: hashicorp/consul-k8s:0.16.0
+  tls:
+    enabled: true
+    caCert:
+      secretName: consul-federation
+      secretKey: caCert
+    caKey:
+      secretName: consul-federation
+      secretKey: caKey
+  federation:
+    enabled: true
+  name: consul
+server:
+  extraVolumes:
+  - type: secret
+    name: consul-federation
+    items:
+      - key: serverConfigJSON
+        path: config.json
+    load: true
+connectInject:
+  enabled: true
+meshGateway:
+  enabled: true

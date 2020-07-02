@@ -1,0 +1,83 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: central-config-batch
+  labels:
+    app: central-config-batch
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      volumes:
+      - name: central-config
+        configMap:
+          name: central-config-split
+      - name: data
+        emptyDir: {}
+      - name: consul-ca-cert
+        secret:
+          items:
+            - key: tls.crt
+              path: tls.crt
+          secretName: consul-ca-cert
+      - name: consul-ca-key
+        secret:
+          items:
+            - key: tls.key
+              path: tls.key
+          secretName: consul-ca-key
+      - name: consul-client-cert
+        emptyDir: {}
+      - name: consul-client-token-zg9hc
+        secret:
+          secretName: consul-client-token-zg9hc
+      initContainers:
+        - name: client-tls-init
+          command:
+              - /bin/sh
+              - -ec
+              - |
+                  cd /consul/tls/client
+                  consul tls cert create -client \
+                      -additional-ipaddress=${HOST_IP} \
+                      -dc=us-east-1 \
+                      -domain=consul \
+                      -ca=/consul/tls/ca/cert/tls.crt \
+                      -key=/consul/tls/ca/key/tls.key
+                  mv us-east-1-client-consul-0.pem tls.crt
+                  mv us-east-1-client-consul-0-key.pem tls.key
+          env:
+            - name: HOST_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+          image: consul:1.8.0
+          name: client-tls-init
+          volumeMounts:
+            - mountPath: /consul/tls/client
+              name: consul-client-cert
+            - mountPath: /consul/tls/ca/cert
+              name: consul-ca-cert
+              readOnly: true
+            - mountPath: /consul/tls/ca/key
+              name: consul-ca-key
+              readOnly: true
+            - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+              name: consul-client-token-zg9hc
+              readOnly: true
+      containers:
+        - name: central-config-batch
+          image: "nicholasjackson/consul-envoy:v1.8.0-v0.13.2"
+          imagePullPolicy: Always
+          env:
+          - name: "CONSUL_HTTP_ADDR"
+            value: "consul-server:8500"
+          - name: "CONSUL_GRPC_ADDR"
+            value: "consul-server:8502"
+          - name: "CENTRAL_CONFIG_DIR"
+            value: "/config"
+          volumeMounts:
+          - name: "central-config"
+            readOnly: true
+            mountPath: "/config"
