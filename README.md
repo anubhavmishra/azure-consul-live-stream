@@ -95,7 +95,7 @@ Metrics-server is running at https://akswest-fef70750.hcp.westus2.azmk8s.io:443/
 
 Move the Kubernetes configuration files in the `consul/` folder
 
-``bash
+```bash
 cd consul/
 mv ../aks/kubeconfig-us-* .
 ```
