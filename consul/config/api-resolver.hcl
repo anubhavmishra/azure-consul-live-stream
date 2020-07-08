@@ -1,13 +1,13 @@
-kind = "service-resolver"
-name = "api"
+Kind = "service-resolver"
+Name = "api"
 
-default_subset = "v1"
+DefaultSubset = "v1"
 
-subsets = {
-  v1 = {
-    filter = "Service.Meta.version == 1"
+Subsets = {
+  "v1" = {
+    Filter = "Service.Meta.version == 1"
   }
-  v2 = {
-    filter = "Service.Meta.version == 2"
+  "v2" = {
+    Filter = "Service.Meta.version == 2"
   }
 }

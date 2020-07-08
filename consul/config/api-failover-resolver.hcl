@@ -1,7 +1,7 @@
-kind = "service-resolver"
-name = "api"
+Kind = "service-resolver"
+Name = "api"
 
-failover = {
+Failover = {
   "*" = {
     datacenters = ["us-west-1"]
   }

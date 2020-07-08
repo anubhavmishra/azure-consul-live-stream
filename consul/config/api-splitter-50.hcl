@@ -1,4 +1,4 @@
-kind = "service-splitter",
+kind = "service-splitter"
 name = "api"
 
 splits = [
