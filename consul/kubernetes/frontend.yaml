@@ -20,17 +20,3 @@ spec:
           image: tutum/curl:latest
           command: [ "/bin/sh", "-c", "--" ]
           args: [ "while true; do curl -is http://localhost:9091;sleep 1;echo ''; done;" ]
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: frontend
-spec:
-  selector:
-    app: frontend
-  ports:
-  - name: http
-    protocol: TCP
-    port: 80
-    targetPort: 9090
-  type: LoadBalancer

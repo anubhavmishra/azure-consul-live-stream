@@ -339,24 +339,6 @@ Apply the api-v2 application to US West
 kubectl --context="aks-west-1" apply -f kubernetes/api-v2-us-west-1.yaml 
 ```
 
-Change frontend yaml config to include datacenter in the upstream service.
-
-```bash
-vim kubernetes/frontend.yaml
-```
-
-Apply the frontend deployment file to update the service in US East.
-
-```bash
-kubectl apply -f kubernetes/frontend.yaml --context="aks-east-1"
-```
-
-Show frontend logs that now point to US West.
-
-```bash
-kubectl --context="aks-east-1" logs -f frontend-x 
-```
-
 Copy consul config to consul server since the servers restarted. 
 
 ```bash
@@ -375,6 +357,30 @@ Next delete api v1 and v2
 kubectl delete deployments api-v2 api-v1 --context="aks-east-1"
 ```
 
+Show frontend logs that now point to US West.
+
+```bash
+kubectl --context="aks-east-1" logs -f frontend-x 
+```
+
+Change frontend yaml config to include datacenter in the upstream service.
+
+```bash
+vim kubernetes/frontend.yaml
+```
+
+Apply the frontend deployment file to update the service in US East.
+
+```bash
+kubectl apply -f kubernetes/frontend.yaml --context="aks-east-1"
+```
+
+Show frontend logs that now point to US West.
+
+```bash
+kubectl --context="aks-east-1" logs -f frontend-x 
+```
+
 Create api v1 and v2 services
 
 ```bash
@@ -384,19 +390,3 @@ kubectl apply -f kubernetes/api-v1.yaml --context="aks-east-1"
 ```bash
 kubectl apply -f kubernetes/api-v2.yaml --context="aks-east-1"
 ```
-
-## Live Stream Overview
-
-- Talk about what the overall goal of the livestream is
-  - Show one cluster Kubernetes app to app communication
-  - intentions
-  - Layer 7 features like traffic spilitting
-  - Show two clusters Kubernetes app to app communication
-  - Layer 7 features like traffic splitting and fail over.
-  - Won't be talking about the ACL system. Please use that in production.
-- Show Terraform config and the two clusters
-  - They have overalaping CIDR range
-- Helm install
-- When doing the consul federation secret, show the `serverConfigJSON` to the users and explain the primary gateways address.
-
-- What are the certificate options in Consul? How is the federation secret different from the client and server certificates.
