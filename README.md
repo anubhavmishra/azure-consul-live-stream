@@ -345,6 +345,16 @@ Copy consul config to consul server since the servers restarted.
 kubectl --context="aks-east-1" cp config/ consul-server-0:/
 ```
 
+Delete the service resolver and splitter for api.
+
+```bash
+kubectl --context="aks-east-1" exec consul-server-0 -- consul config delete -kind service-resolver -name api
+```
+
+```bash
+kubectl --context="aks-east-1" exec consul-server-0 -- consul config delete -kind service-splitter -name api
+```
+
 Show service failover by creating new service resolver and then deleting api v1 and v2 deployments.
 
 ```bash
