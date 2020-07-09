@@ -83,7 +83,7 @@ echo "$(terraform output aks_us_west_1_cluster_config)" > kubeconfig-us-west-1.y
 
 Move the Kubernetes configuration files in the `consul/` folder
 
-``bash
+```bash
 cd consul/
 mv ../aks/kubeconfig-us-* .
 ```
